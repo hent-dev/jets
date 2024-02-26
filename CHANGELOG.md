@@ -3,6 +3,57 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/).
 
+## [4.0.10] - 2023-12-04
+- [#678](https://github.com/boltops-tools/jets/pull/678) handle option method or http_method from route state
+
+## [4.0.9] - 2023-12-03
+- [#674](https://github.com/boltops-tools/jets/pull/674) Fix broken --mode jobs new project generation
+- [#675](https://github.com/boltops-tools/jets/pull/675) Add resource tags to CloudFormation stack
+
+## [4.0.8] - 2023-12-03
+- [#677](https://github.com/boltops-tools/jets/pull/677) pin dynomite 1.2.7
+
+## [4.0.7] - 2023-10-20
+- [#671](https://github.com/boltops-tools/jets/pull/671) fix preheat warm job iam role reference
+
+## [4.0.6] - 2023-10-20
+- [#670](https://github.com/boltops-tools/jets/pull/670) Fixes IAM role permissions for PreheatJob
+
+## [4.0.5] - 2023-10-19
+- [#665](https://github.com/boltops-tools/jets/pull/665) only add add_stage_name when request is present
+- [#669](https://github.com/boltops-tools/jets/pull/669) Add optional command args to the jets runner command.
+
+## [4.0.4] - 2023-09-07
+- [#662](https://github.com/boltops-tools/jets/pull/662) fix vpc iam permissions
+
+## [4.0.3] - 2023-08-03
+- [#657](https://github.com/boltops-tools/jets/pull/657) [Fix] ApiGateway for local Middleware: fix query_string_parameters
+
+## [4.0.2] - 2023-08-03
+- [#660](https://github.com/boltops-tools/jets/pull/660) Fix prewarming
+
+## [4.0.1] - 2023-06-06
+- [#655](https://github.com/boltops-tools/jets/pull/655) fix cors when using authorizers
+- [#656](https://github.com/boltops-tools/jets/pull/656) fix prewarming iam permission
+
+## [4.0.0] - 2023-05-27
+- [#641](https://github.com/boltops-tools/jets/pull/641) bundle check and prevent error from getting to aws lambda
+- [#642](https://github.com/boltops-tools/jets/pull/642) Fix rack mounted apps: update interface with removed meth
+- [#643](https://github.com/boltops-tools/jets/pull/643) JETS_EXTRA support, deprecate JETS_ENV_EXTRA
+- [#644](https://github.com/boltops-tools/jets/pull/644) remove docs to separate repo
+- [#645](https://github.com/boltops-tools/jets/pull/645) PreheatJob: fix function lookups and iam function permission
+- [#646](https://github.com/boltops-tools/jets/pull/646) log debug uploading and setting content type
+- [#647](https://github.com/boltops-tools/jets/pull/647) fix Jets.logger call
+- [#648](https://github.com/boltops-tools/jets/pull/648) make sure logger level info is default
+- [#649](https://github.com/boltops-tools/jets/pull/649) Custom Domain: Hard fail on IAM permission error
+- [#650](https://github.com/boltops-tools/jets/pull/650) Validate lambda function names
+- [#651](https://github.com/boltops-tools/jets/pull/651) allow custom rake tasks with params to work with jets as well as rake command
+- [#652](https://github.com/boltops-tools/jets/pull/652) Validate lambda function names: fix regexp
+- [#653](https://github.com/boltops-tools/jets/pull/653) refactor cleanup: rename Jets::Naming to Jets::Names
+- [#654](https://github.com/boltops-tools/jets/pull/654) Ruby 3.2 Support
+- apigw routes state save: fix to_json infinite loop from Grape apps
+- delete .python-version: more general approach. fixes specs when specific version of python is not installed
+
 ## [3.2.2] - 2023-05-19
 - [#640](https://github.com/boltops-tools/jets/pull/640) Base path mapping CloudFormation custom resource and lambda function hardening
 

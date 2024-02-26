@@ -2,8 +2,8 @@ class Jets::Application
   module Defaults
     extend ActiveSupport::Concern
 
-    included do
-      def self.default_iam_policy
+    class_methods do
+      def default_iam_policy
         project_namespace = Jets.project_namespace
         logs = {
           action: ["logs:*"],
@@ -24,23 +24,46 @@ class Jets::Application
         }
         policies << cloudformation
 
-        if Jets.config.function.vpc_config
-          vpc = {
-            action: %w[
-              ec2:CreateNetworkInterface
-              ec2:DeleteNetworkInterface
-              ec2:DescribeNetworkInterfaces
-              ec2:DescribeVpcs
-              ec2:DescribeSubnets
-              ec2:DescribeSecurityGroups
-            ],
-            effect: "Allow",
-            resource: "*",
-          }
-          policies << vpc
-        end
-
         policies
+      end
+
+      def vpc_iam_policy_statement
+        {
+          Action: %w[
+            ec2:CreateNetworkInterface
+            ec2:DeleteNetworkInterface
+            ec2:DescribeNetworkInterfaces
+            ec2:DescribeVpcs
+            ec2:DescribeSubnets
+            ec2:DescribeSecurityGroups
+          ],
+          Effect: "Allow",
+          Resource: "*",
+        }
+      end
+
+      # Used by app/jobs/jets/preheat_job.rb
+      def preheat_job_iam_policy
+        policy = [
+          {
+            Sid: "Statement1",
+            Action: ["logs:*"],
+            Effect: "Allow",
+            Resource: [{
+              "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${WarmLambdaFunction}"
+            }]
+          },
+          {
+            Sid: "Statement2",
+            Action: ["lambda:InvokeFunction", "lambda:InvokeAsync"],
+            Effect: "Allow",
+            Resource: [{
+              "Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:#{Jets.project_namespace}-*"
+            }]
+          }
+        ]
+        policy << vpc_iam_policy_statement if Jets.config.function.vpc_config
+        policy
       end
     end
 
@@ -51,6 +74,7 @@ class Jets::Application
       config.autoload_paths = [] # allows for customization
       config.ignore_paths = [] # allows for customization
       config.logger = Jets::Logger.new($stderr)
+      config.logger.level = Logger::INFO
       config.time_zone = "UTC"
 
       # function properties defaults
@@ -159,9 +183,12 @@ class Jets::Application
       config.deploy.stagger.batch_size = 10
 
       config.hot_reload = Jets.env.development?
+      
+      config.resource_tags = {}
 
       config.ruby = ActiveSupport::OrderedOptions.new
       config.ruby.check = true
+      config.ruby.supported_versions = %w[2.5 2.7 3.2] # supported by AWS Lambda
 
       config
     end
